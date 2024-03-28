@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,30 +10,47 @@ namespace Infrastructure.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-       
-
-        public IEnumerable<T> GetAll()
+        private readonly DataContext _context;
+        private DbSet<T> table;
+        public GenericRepository(DataContext context)
         {
-            throw new NotImplementedException();
+
+              _context = context;
+            table= _context.Set<T>();
+
+
+        }
+        public IEnumerable<T> GetAll()
+           
+        {
+            return table.ToList();
+
+
         }
 
         public T GetById(object id)
         {
-            throw new NotImplementedException();
+            return table.Find(id);
+            
+            
         }
 
         public void Insert(T entity)
         {
-            throw new NotImplementedException();
+            table.Add(entity);
+           
         }
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            table.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
         public void Delete(object id)
         {
-            throw new NotImplementedException();
+            T entity = GetById(id);
+            table.Remove(entity);
+           
         }
     }
 }
