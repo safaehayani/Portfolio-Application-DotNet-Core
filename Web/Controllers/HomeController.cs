@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Entities;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Web.Models;
 
@@ -6,16 +8,22 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork<Owner> _owner;
+
+        public HomeController(ILogger<HomeController> logger,
+                              IUnitOfWork<Owner> owner  )
         {
             _logger = logger;
+            _owner = owner;
+
         }
 
         public IActionResult Index()
         {
-            return View();
+            var entity = _owner.Entity.GetAll().First() ;
+            return View(entity);
         }
 
         public IActionResult Privacy()

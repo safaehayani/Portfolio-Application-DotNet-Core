@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.UnitOfWork
 {
-    internal class UnitOfWork<T> : IUnitOfWork<T> where T : class
+    public class UnitOfWork<T> : IUnitOfWork<T> where T : class
     {
         private readonly DataContext _context;
         private IGenericRepository<T> _entity;

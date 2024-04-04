@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure;
+using Core.Interfaces;
+using Infrastructure.UnitOfWork;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +13,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyPortefolioDb"));
 
 });
+builder.Services.AddScoped(typeof(IUnitOfWork<>),typeof(UnitOfWork<>));
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
